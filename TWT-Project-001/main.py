@@ -123,6 +123,7 @@ def main():
             if event.type == YELLOW_HIT: 
                 yellow_health -= 1
 
+<<<<<<< HEAD
         winner_text = ""
         if red_health <= 0:
             winner_text = "Yellow Wins!"
@@ -133,6 +134,8 @@ def main():
         if winner_text !=  "":
             pass # SOMEONE WON
 
+=======
+>>>>>>> master
         print(red_bullets, yellow_bullets)
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
