@@ -15,6 +15,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
+WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 BORDER = pygame.Rect(WIDTH//2 - 2, 0, 5, HEIGHT)
 
@@ -102,6 +103,12 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
         elif bullet.x < 0:
             red_bullets.remove(bullet)
 
+def draw_winner(text):
+    draw_text = WINNER_FONT.render(text, 1, WHITE)
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width() / 2, HEIGHT/2 - draw_text.get_height() / 2))
+    pygame.display.update()
+    pygame.time.delay(5000)
+
 def main():
     red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -145,7 +152,8 @@ def main():
             winner_text = "Red Wins!"
         
         if winner_text !=  "":
-            pass # SOMEONE WON
+            draw_winner(winner_text)
+            break
 
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
