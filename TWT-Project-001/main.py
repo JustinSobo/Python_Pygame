@@ -5,61 +5,60 @@ import os
 pygame.font.init()
 pygame.mixer.init()
 
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1280, 720
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("First Game!")
+pygame.display.set_caption("Space Shooter!")
 
 BLACK_PEARL = (30, 39, 46)
 WHITE = (255, 255, 255)
-BLACK = (127, 140, 141)
+BLACK  = (127, 140, 141)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
-HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
-WINNER_FONT = pygame.font.SysFont('comicsans', 100)
+FONT_FACE = "Impact"
+HEALTH_FONT = pygame.font.SysFont(str(FONT_FACE), 30)
+WINNER_FONT = pygame.font.SysFont(str(FONT_FACE), 100)
 
-BORDER = pygame.Rect(WIDTH//2 - 2, 0, 5, HEIGHT)
+BORDER = pygame.Rect(WIDTH//2 - 2, 0, 3, HEIGHT)
 
-BULLET_FIRE_SOUND = pygame.mixer.Sound('TWT-Project-001/Assets/Gun-Fire.mp3')
-BULLET_HIT_SOUND = pygame.mixer.Sound('TWT-Project-001/Assets/Gun-Hit.mp3')
+BULLET_FIRE_SOUND = pygame.mixer.Sound("TWT-Project-001/Assets/Gun-Fire.wav")
+BULLET_HIT_SOUND = pygame.mixer.Sound("TWT-Project-001/Assets/Gun-Hit.wav")
 
 FPS = 60
 VEL = 5
-BULLET_VEL = 7
-MAX_BULLETS = 3
-SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
+BULLET_VEL = 10
+MAX_BULLETS = 4
+SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 73, 90
 
 YELLOW_HIT = pygame.USEREVENT + 1
 RED_HIT = pygame.USEREVENT + 2
 
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
-    os.path.join('TWT-Project-001', 'Assets', 'spaceship_yellow.png'))
+    os.path.join('TWT-Project-001', 'Assets', 'halo_spaceship_yellow.png'))
 YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
     YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 90)
 
 RED_SPACESHIP_IMAGE = pygame.image.load(
-    os.path.join('TWT-Project-001', 'Assets', 'spaceship_red.png'))
+    os.path.join('TWT-Project-001', 'Assets', 'halo_spaceship_red.png'))
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
     RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 270)
 
 SPACE = pygame.transform.scale(pygame.image.load(
-    os.path.join('TWT-Project-001', 'Assets', 'space.png')), (WIDTH, HEIGHT))
+    os.path.join('TWT-Project-001', 'Assets', 'halo-bg.jpg')), (WIDTH, HEIGHT))
 
 def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health):
     WIN.blit(SPACE, (0, 0))
-    pygame.draw.rect(WIN, BLACK, BORDER)
+    pygame.draw.rect(WIN, WHITE, BORDER)
 
     red_health_text = HEALTH_FONT.render(
-        "Health: " + str(red_health), 1, WHITE)
+        "Health: " + str(red_health), 1, RED)
     yellow_health_text = HEALTH_FONT.render(
-        "Health: " + str(yellow_health), 1, WHITE)
+        "Health: " + str(yellow_health), 1, YELLOW)
     WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
     WIN.blit(yellow_health_text, (10, 10))
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
-
-
 
     for bullet in red_bullets:
         pygame.draw.rect(WIN, RED, bullet)
@@ -114,14 +113,14 @@ def draw_winner(text):
     pygame.time.delay(5000)
 
 def main():
-    red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
-    yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    red = pygame.Rect(WIDTH * 0.95 - SPACESHIP_WIDTH, HEIGHT * 0.45, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    yellow = pygame.Rect(WIDTH * 0.05, HEIGHT * 0.45, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
 
     red_bullets = []
     yellow_bullets = []
 
-    red_health = 10
-    yellow_health = 10
+    red_health = 100
+    yellow_health = 100
 
     clock = pygame.time.Clock()
     run = True
@@ -146,14 +145,12 @@ def main():
                     BULLET_FIRE_SOUND.play()
         
             if event.type == RED_HIT:
-                red_health -= 1
+                red_health -= 10
                 BULLET_HIT_SOUND.play()
-
-            
+     
             if event.type == YELLOW_HIT: 
-                yellow_health -= 1
+                yellow_health -= 10
                 BULLET_HIT_SOUND.play()
-
 
         winner_text = ""
         if red_health <= 0:
