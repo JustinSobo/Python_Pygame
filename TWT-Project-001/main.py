@@ -2,15 +2,19 @@ from curses import KEY_DOWN
 from turtle import width
 import pygame
 import os
+pygame.font.init()
 
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("First Game!")
 
 BLACK_PEARL = (30, 39, 46)
+WHITE = (255, 255, 255)
 BLACK = (127, 140, 141)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+
+HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
 
 BORDER = pygame.Rect(WIDTH//2 - 2, 0, 5, HEIGHT)
 
@@ -36,11 +40,21 @@ RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
 SPACE = pygame.transform.scale(pygame.image.load(
     os.path.join('TWT-Project-001', 'Assets', 'space.png')), (WIDTH, HEIGHT))
 
-def draw_window(red, yellow, red_bullets, yellow_bullets):
+def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health):
     WIN.blit(SPACE, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
+
+    red_health_text = HEALTH_FONT.render(
+        "Health: " + str(red_health), 1, WHITE)
+    yellow_health_text = HEALTH_FONT.render(
+        "Health: " + str(yellow_health), 1, WHITE)
+    WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
+    WIN.blit(yellow_health_text, (10, 10))
+
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
+
+
 
     for bullet in red_bullets:
         pygame.draw.rect(WIN, RED, bullet)
@@ -133,14 +147,13 @@ def main():
         if winner_text !=  "":
             pass # SOMEONE WON
 
-        print(red_bullets, yellow_bullets)
         keys_pressed = pygame.key.get_pressed()
         yellow_handle_movement(keys_pressed, yellow)
         red_handle_movement(keys_pressed, red)
 
         handle_bullets(yellow_bullets, red_bullets, yellow, red)
 
-        draw_window(red, yellow, red_bullets, yellow_bullets)
+        draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health)
 
     pygame.quit()
 
